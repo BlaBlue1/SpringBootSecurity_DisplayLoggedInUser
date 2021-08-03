@@ -14,13 +14,13 @@ public class HomeController {
     public String login(){
         return "login";
     }
-    @RequestMapping("/teacher")
+    @RequestMapping("/admin")
     public String admin(){
-        return "teacher";
+        return "admin";
     }
-    @RequestMapping("/student")
-    public String user(){
-        return "student";
+    @RequestMapping("/logout")
+    public String logout(){
+        return "redirect:/login?logout=true";
     }
 
 }

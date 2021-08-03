@@ -16,14 +16,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests()
-                .antMatchers("/teacher").hasRole("ADMIN")
-                .antMatchers("/student").hasRole("USER")
+        httpSecurity.authorizeRequests().antMatchers("/h2-console/**")
+                .permitAll().antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/**").hasAnyRole("ADMIN","USER")
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll();
+                .loginPage("/login").permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login?logout=true").permitAll();
+
+//                .antMatchers("/teacher").hasRole("ADMIN")
+//                .antMatchers("/student").hasRole("USER")
+//                .antMatchers("/**").hasAnyRole("ADMIN","USER")
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll();
 
         httpSecurity.csrf().ignoringAntMatchers("/h2-console/**");
         httpSecurity.headers().frameOptions().sameOrigin();
@@ -40,16 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .withDefaultSchema()
-                .withUser("teacher")
-                .password(passwordEncoder().encode("teacher"))
-                .roles("ADMIN")
-                .and()
-                .withUser("student").password(passwordEncoder().encode("student"))
-                .roles("USER")
-                .and()
-                .withUser("admin").password(passwordEncoder().encode("admin"))
-                .roles("ADMIN","USER");
+                .usersByUsernameQuery("select username, password, enabled from " + " user_table where username=?")//? we don't know the value but the user will provide it
+        .authoritiesByUsernameQuery("select username, role from role_table " +
+                " where username=?");
 
     }
 }
