@@ -20,7 +20,9 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String index() {
+    public String index(Principal principal, Model model) {
+        String loggeduser = principal.getName();
+        model.addAttribute("loggeduser", loggeduser);
         return "index";
     }
     @RequestMapping("/login")
@@ -28,7 +30,9 @@ public class HomeController {
         return "login";
     }
     @RequestMapping("/admin")
-    public String admin(){
+    public String admin(Principal principal, Model model){
+        String loggeduser = principal.getName();
+        model.addAttribute("loggeduser", loggeduser);
         return "admin";
     }
     @RequestMapping("/logout")
