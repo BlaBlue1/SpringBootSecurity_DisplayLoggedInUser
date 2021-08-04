@@ -9,9 +9,11 @@
 </head>
 <body>
 
-<h2> Welcome Page </h2>
+<h2>Welcome Page </h2>
+
 
 <a th:href="@{/admin}">Admin Page</a>
+<a th:href="@{/secure}">User</a>
 <br>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Logout">
